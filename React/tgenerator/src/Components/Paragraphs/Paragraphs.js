@@ -1,7 +1,4 @@
-import React, { useEffect } from "react";
-
-import { useDispatch, useSelector } from "react-redux"
-import { fetchText} from "../../redux/TextSlice/textSlice"
+import { useSelector } from "react-redux"
 
 function Paragraphs(){
     const data = useSelector((state) => state.text)

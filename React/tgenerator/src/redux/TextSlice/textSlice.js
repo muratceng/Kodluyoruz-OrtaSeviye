@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchText = createAsyncThunk('text/getText', async (count,format) =>{
-    const res = await axios (`${process.env.REACT_APP_BASE_ENDPOINT}&paras=${count}&format=${format}`);
+export const fetchText = createAsyncThunk('text/getText', async (count) =>{
+    const res = await axios (`${process.env.REACT_APP_BASE_ENDPOINT}&paras=${count.c}&format=${count.f}`);
+    console.log(`${process.env.REACT_APP_BASE_ENDPOINT}&paras=${count.c}&format=${count.f}`);
     return res.data;
 })
 
@@ -11,6 +12,7 @@ export const textSlice = createSlice({
     initialState:{
         content:"",
         isloading:false,
+        error:""
     },
     reducers:{
     },

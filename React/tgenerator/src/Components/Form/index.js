@@ -5,21 +5,21 @@ import { fetchText } from "../../redux/TextSlice/textSlice";
 function Form() {
 
     const [count,setCount] = useState("1");
-    const [isHtml,setIsHtml] = useState(false);
+    const [isHtml,setIsHtml] = useState("text");
     const dispatch = useDispatch();
     const didMountRef = useRef(false);
+    let type={c:count,f:isHtml}
 
     useEffect(() => {
         if(didMountRef.current){
-            if(isHtml==true){
-                dispatch(fetchText(count,"html"))
+            if(isHtml===true){
+                dispatch(fetchText(type))
             }else{
-                dispatch(fetchText(count,"text"))
+                dispatch(fetchText(type))
             }
         }else{
             didMountRef.current=true;
         }
-        
     }, [count,isHtml])
     
     
@@ -39,8 +39,8 @@ function Form() {
           </div>
           <div>
               <select value={isHtml} onChange={(e)=>setIsHtml(e.target.value)}>
-                  <option value={true}> Yes</option>
-                  <option value={false}> No</option>
+                  <option value={"html"}> Yes</option>
+                  <option value={"text"}> No</option>
               </select>
           </div>
       </div>
