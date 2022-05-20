@@ -14,6 +14,7 @@ function Header(){
             </div>
             </div>
         <div>
+            <br/><br/>
             <h1>Markdown Previewer</h1>
             </div>
         </div>
