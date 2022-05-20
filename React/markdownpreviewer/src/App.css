@@ -3,5 +3,36 @@
 }
 
 body{
-  background-color: rgb(148, 148, 11) !important;
+  background-color: #FFCD38 !important;
+  color: #4A4A4A;
+}
+
+.txtarea{
+  margin-top: 10%;
+  width: 100%;
+  height: 650px;
+  background-color: #FFDD67;
+  resize: none;
+}
+
+.preview{
+  border: #4A4A4A 1px solid;
+  margin-top: 10%;
+  width: 100%;
+  height: 650px;
+  background-color: #FFDD67;
+}
+
+.questionmark{
+  border: #4A4A4A 1px solid;
+  font-size: 35px;
+  width: 70px;
+}
+
+.questionmark:hover{
+  cursor: pointer;
+}
+
+.end{
+  align-items: flex-end !important;
 }

@@ -28,12 +28,17 @@ export const TextSlice = createSlice({
     initialState:{
         content:"this is user input",
         texthelp:help,
+        toggle:false,
     },
     reducers:{
         changeText:(state,action)=>{
             state.content=action.payload;
+        },
+        toggle:(state,action)=>{
+          state.toggle=!state.toggle;
         }
     }
 })
 
 export default TextSlice.reducer;
+export const {changeText, toggle} =TextSlice.actions;
