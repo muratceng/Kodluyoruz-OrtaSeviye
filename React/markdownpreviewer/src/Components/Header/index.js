@@ -9,11 +9,13 @@ function Header(){
     return(
         <div>
         <div>
-            <div className="questionmark row justify-content-end">
-            <span onClick={()=>handleClick()} >?</span>
+            <div className="questionmark" onClick={()=>handleClick()}>
+            <span style={{  textAlign: 'center'}}  >?</span>
             </div>
             </div>
-            <span><h1>Markdown Previewer</h1></span>
+        <div>
+            <h1>Markdown Previewer</h1>
+            </div>
         </div>
     )
 
