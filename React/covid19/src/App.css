@@ -2,3 +2,21 @@
   text-align: center;
 }
 
+.recovered{
+  border: black 1px solid;
+  padding: 5%;
+  background-color: #Bff2ca80;
+}
+
+.deaths{
+  border: black 1px solid;
+  padding: 5%;
+  background-color: #edb2b280;
+}
+
+.confirmed{
+  border: black 1px solid;
+  padding: 5%;
+  background-color: #66B3FF80;
+
+}
