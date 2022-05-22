@@ -1,9 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchData = createAsyncThunk('covid/getData', async ()=>{
-    const res = await axios(`${process.env.REACT_APP_API_BASE_ENDPOINT}`)
-    console.log(`${process.env.REACT_APP_API_BASE_ENDPOINT}`)
+export const fetchData = createAsyncThunk('covid/getData', async (iso)=>{
+    if(iso == ''){
+        const res = await axios(`${process.env.REACT_APP_API_BASE_ENDPOINT}`)
+        return res.data
+    }else{
+        const res = await axios(`${process.env.REACT_APP_API_BASE_ENDPOINT}/countries/${iso}`)
+        return res.data;
+    }
+    
+})
+
+export const fetchCountry = createAsyncThunk('covid/getCountries', async ()=>{
+    const res = await axios(`${process.env.REACT_APP_API_BASE_ENDPOINT}/countries`)
     return res.data;
 })
 
@@ -12,7 +22,9 @@ export const fetchData = createAsyncThunk('covid/getData', async ()=>{
      initialState:{
         data:[],
         loading:false,
-        error:""
+        countries:[],
+        error:"",
+        countryLoading:false
      },
      reducers:{},
      extraReducers:{
@@ -26,6 +38,17 @@ export const fetchData = createAsyncThunk('covid/getData', async ()=>{
          [fetchData.rejected]:(state,action)=>{
              state.loading=false;
              state.error=state.error.message;
+         },
+         [fetchCountry.pending]:(state,action)=>{
+             state.countryLoading = true;
+         },
+         [fetchCountry.fulfilled]:(state,action)=>{
+             state.countries=action.payload;
+             state.countryLoading=false;
+         },
+         [fetchCountry.rejected]:(state,action)=>{
+             state.error=state.error.message;
+             state.countryLoading=false;
          }
      }
  })

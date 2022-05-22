@@ -1,5 +1,5 @@
 import Cards from "../../Components/Cards";
-import Chart from "../../Components/Chart";
+import BarChart from "../../Components/BarChart";
 import Form from "../../Components/Form";
 import Header from "../../Components/Header";
 
@@ -9,7 +9,7 @@ function Home(){
             <Header/>
             <Cards/>
             <Form/>
-            <Chart/>
+            <BarChart/>
         </div>
     )
 }

@@ -4,11 +4,9 @@ import { fetchData } from "../../redux/covidSlice/covidSlice";
 
 function Cards() {
   const covid = useSelector((state) => state.covid);
-  const dispatch = useDispatch();
   const data = covid.data;
 
   useEffect(() => {
-    dispatch(fetchData());
     console.log(data.lastUpdate);
 
   }, []);
