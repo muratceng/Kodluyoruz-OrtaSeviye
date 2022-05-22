@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchData = createAsyncThunk('covid/getData', async (iso)=>{
-    if(iso == ''){
+    if(iso === ''){
         const res = await axios(`${process.env.REACT_APP_API_BASE_ENDPOINT}`)
         return res.data
     }else{

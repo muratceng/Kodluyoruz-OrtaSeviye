@@ -6,25 +6,24 @@ function Form(){
     const data = useSelector((state)=>state.covid);
     const dispatch = useDispatch();
     const [country,setCountry] = useState('')
-    
 
     useEffect(() => {
      dispatch(fetchCountry())
-    }, [dispatch])
+     console.log("1")
+    }, [])
     
     useEffect(() => {
         dispatch(fetchData(country))
     }, [country])
     
-
-    if(data.countryLoading){
-        return (<div>
-            loading...
-        </div>)
-    }
+    
 
     return(
         <div className="mt-5 mb-2">
+            {data.countryLoading && <div> loading ...</div>
+
+            }
+
             {data.countries.countries &&
              <select value={country} onChange={(e)=>setCountry(e.target.value)} name="country">
              <option key={''} value={''}>Global</option>

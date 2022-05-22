@@ -1,15 +1,8 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchData } from "../../redux/covidSlice/covidSlice";
+import {useSelector } from "react-redux";
 
 function Cards() {
   const covid = useSelector((state) => state.covid);
   const data = covid.data;
-
-  useEffect(() => {
-    console.log(data.lastUpdate);
-
-  }, []);
 
   if (data.loading) {
     return <div>Loading...</div>;
