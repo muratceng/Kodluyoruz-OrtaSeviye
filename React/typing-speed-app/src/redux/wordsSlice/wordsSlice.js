@@ -1,34 +1,28 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-
-export const fetchData = createAsyncThunk('words/getData', async (lang)=>{
-    const res = await axios(`${lang}.json`)
-    return res.data;
-
-})
+import { createSlice } from "@reduxjs/toolkit";
+import turkish from "../../words/turkish.json";
+import english from "../../words/english.json";
 
 export const wordsSlice = createSlice({
     name:"words",
     initialState:{
-        data:[],
-        loading:false,
-        error:''
+        data:turkish.words,
     },
     reducers:{
-
+        shuffleWords:(state)=>{
+            const tmp = [...state.data]
+                .sort(() => Math.random() - 0.5)
+                .map((card) => ({ ...card}));
+            state.data = tmp;
+            console.log("asdas",state.data);
+        },
+        changeEnglish:(state)=>{
+            state.data=english;
+        },
+        changeTurkish:(state)=>{
+            state.data=turkish;
+        },
     },
-    extraReducers:{
-        [fetchData.pending]:(state,action)=>{
-            state.loading=true;
-        },
-        [fetchData.fulfilled]:(state,action)=>{
-            state.loading=false;
-        },
-        [fetchData.rejected]:(state,action)=>{
-            state.loading=false;
-            state.error=state.error.message;
-        }
-    }
 })
 
+export const {shuffleWords} = wordsSlice.actions;
 export default wordsSlice.reducer;
