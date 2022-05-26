@@ -14,15 +14,27 @@ function Text(){
   }, [])
 
     let tenwords = data.data.slice(0,10);
+    let secondTen = data.data.slice(10,20)
 
 
     return(
-        <div>
+        <div className="mid">
+        <div className="text">
+            <div>
             {
                 tenwords.map((item,i)=>{
                     return <span key={i}>{item.targetWord} </span>
                 })
             }
+            </div>
+            <div>
+                {
+                    secondTen.map((item,i)=>{
+                        return <span key={i}>{item.targetWord} </span>
+                    })
+                }
+            </div>
+        </div>
         </div>
     )
 }

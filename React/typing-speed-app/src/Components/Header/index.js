@@ -3,7 +3,9 @@ function Header(){
     
     
     return(
-        <div>header works</div>
+        <div>
+            <h1>Typing Speed App</h1>
+        </div>
     )
 }
 

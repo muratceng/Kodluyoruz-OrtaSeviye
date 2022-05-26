@@ -2,3 +2,26 @@
   text-align: center;
 }
 
+.text{
+  border: black 1px solid;
+  background-color: white;
+  width: 50%;
+  margin-left: 25%;
+}
+
+body{
+  background-color: #add5ff !important;
+  font-size:x-large !important;
+}
+
+.mid{
+  align-items: center;
+  text-align: center;
+}
+
+.input{
+  margin-top: 5%;
+  font-size: x-large;
+  width: 40%;
+  margin-right: 10%;
+}
