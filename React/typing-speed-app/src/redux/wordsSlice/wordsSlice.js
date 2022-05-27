@@ -6,6 +6,10 @@ export const wordsSlice = createSlice({
     name:"words",
     initialState:{
         data:turkish.words,
+        spaceCount:0,
+        currentWord:"",
+        trueWords:[],
+        wrongWords:[]
     },
     reducers:{
         shuffleWords:(state)=>{
@@ -21,8 +25,22 @@ export const wordsSlice = createSlice({
         changeTurkish:(state)=>{
             state.data=turkish;
         },
+        setSpaceCount : (state,action)=>{
+            state.spaceCount=action.payload;
+        },
+        setCurrentword:(state,action)=>{
+            state.currentWord=action.payload;
+        },
+        setTrueWords:(state,action)=>{
+            let tmp = [...state.trueWords,action.payload];
+            state.trueWords=tmp;
+        },
+        setWorngWords:(state,action)=>{
+            let tmp = [...state.wrongWords,action.payload];
+            state.wrongWords=tmp;
+        }
     },
 })
 
-export const {shuffleWords} = wordsSlice.actions;
+export const {shuffleWords, setSpaceCount, setCurrentword, setTrueWords, setWorngWords} = wordsSlice.actions;
 export default wordsSlice.reducer;
