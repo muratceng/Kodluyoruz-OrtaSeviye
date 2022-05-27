@@ -141,11 +141,6 @@
           "englishWord": "had"
         },
         {
-          "rank": 29,
-          "targetWord": "",
-          "englishWord": "the"
-        },
-        {
           "rank": 30,
           "targetWord": "arasında",
           "englishWord": "of"
@@ -482,7 +477,7 @@
         },
         {
           "rank": 97,
-          "targetWord": "inşa etmek",
+          "targetWord": "inşa",
           "englishWord": "build"
         },
         {
@@ -599,11 +594,6 @@
           "rank": 120,
           "targetWord": "her",
           "englishWord": "every"
-        },
-        {
-          "rank": 121,
-          "targetWord": "iyi",
-          "englishWord": "good"
         },
         {
           "rank": 122,
@@ -877,7 +867,7 @@
         },
         {
           "rank": 176,
-          "targetWord": "daha fazla",
+          "targetWord": "fazla",
           "englishWord": "more"
         },
         {
@@ -969,11 +959,6 @@
           "rank": 194,
           "targetWord": "kim",
           "englishWord": "who"
-        },
-        {
-          "rank": 195,
-          "targetWord": "may",
-          "englishWord": "may"
         },
         {
           "rank": 196,
@@ -1121,11 +1106,6 @@
           "englishWord": "last"
         },
         {
-          "rank": 225,
-          "targetWord": "let",
-          "englishWord": "let"
-        },
-        {
           "rank": 226,
           "targetWord": "düşünce",
           "englishWord": "thought"
@@ -1199,11 +1179,6 @@
           "rank": 240,
           "targetWord": "geç",
           "englishWord": "late"
-        },
-        {
-          "rank": 241,
-          "targetWord": "run",
-          "englishWord": "run"
         },
         {
           "rank": 242,
@@ -1309,11 +1284,6 @@
           "rank": 262,
           "targetWord": "dur",
           "englishWord": "stop"
-        },
-        {
-          "rank": 263,
-          "targetWord": "bir kez",
-          "englishWord": "once"
         },
         {
           "rank": 264,
@@ -1761,11 +1731,6 @@
           "englishWord": "multiply"
         },
         {
-          "rank": 353,
-          "targetWord": "hiçbir şey",
-          "englishWord": "nothing"
-        },
-        {
           "rank": 354,
           "targetWord": "ders",
           "englishWord": "course"
@@ -1799,11 +1764,6 @@
           "rank": 360,
           "targetWord": "nesne",
           "englishWord": "object"
-        },
-        {
-          "rank": 361,
-          "targetWord": "karar vermek",
-          "englishWord": "decide"
         },
         {
           "rank": 362,
@@ -1874,11 +1834,6 @@
           "rank": 375,
           "targetWord": "düzlem",
           "englishWord": "plane"
-        },
-        {
-          "rank": 376,
-          "targetWord": "başkasının yeri",
-          "englishWord": "stead"
         },
         {
           "rank": 377,
@@ -2086,11 +2041,6 @@
           "englishWord": "box"
         },
         {
-          "rank": 418,
-          "targetWord": "i",
-          "englishWord": "noun"
-        },
-        {
           "rank": 419,
           "targetWord": "alan",
           "englishWord": "field"
@@ -2256,19 +2206,9 @@
           "englishWord": "heard"
         },
         {
-          "rank": 452,
-          "targetWord": "en iyi",
-          "englishWord": "best"
-        },
-        {
           "rank": 453,
           "targetWord": "saat",
           "englishWord": "hour"
-        },
-        {
-          "rank": 454,
-          "targetWord": "daha iyi",
-          "englishWord": "better"
         },
         {
           "rank": 455,
@@ -2364,11 +2304,6 @@
           "rank": 473,
           "targetWord": "seyahat",
           "englishWord": "travel"
-        },
-        {
-          "rank": 474,
-          "targetWord": "daha az",
-          "englishWord": "less"
         },
         {
           "rank": 475,
@@ -2856,11 +2791,6 @@
           "englishWord": "winter"
         },
         {
-          "rank": 572,
-          "targetWord": "Cts",
-          "englishWord": "sat"
-        },
-        {
           "rank": 573,
           "targetWord": "yazılı",
           "englishWord": "written"
@@ -3306,11 +3236,6 @@
           "englishWord": "scale"
         },
         {
-          "rank": 662,
-          "targetWord": "yüksek sesle",
-          "englishWord": "loud"
-        },
-        {
           "rank": 663,
           "targetWord": "bahar",
           "englishWord": "spring"
@@ -3601,11 +3526,6 @@
           "englishWord": "floor"
         },
         {
-          "rank": 721,
-          "targetWord": "ya da",
-          "englishWord": "either"
-        },
-        {
           "rank": 722,
           "targetWord": "sonuç",
           "englishWord": "result"
@@ -3674,11 +3594,6 @@
           "rank": 735,
           "targetWord": "sessiz",
           "englishWord": "silent"
-        },
-        {
-          "rank": 736,
-          "targetWord": "uzun boylu",
-          "englishWord": "tall"
         },
         {
           "rank": 737,
@@ -4471,11 +4386,6 @@
           "englishWord": "liquid"
         },
         {
-          "rank": 895,
-          "targetWord": "log",
-          "englishWord": "log"
-        },
-        {
           "rank": 896,
           "targetWord": "demek",
           "englishWord": "meant"
@@ -4552,7 +4462,7 @@
         },
         {
           "rank": 911,
-          "targetWord": "teşekkür ederim",
+          "targetWord": "teşekkürler",
           "englishWord": "thank"
         },
         {
@@ -4634,11 +4544,6 @@
           "rank": 927,
           "targetWord": "elma",
           "englishWord": "apple"
-        },
-        {
-          "rank": 928,
-          "targetWord": "satın aldı",
-          "englishWord": "bought"
         },
         {
           "rank": 929,
@@ -4747,7 +4652,7 @@
         },
         {
           "rank": 950,
-          "targetWord": "devam etmek",
+          "targetWord": "devam",
           "englishWord": "continue"
         },
         {
