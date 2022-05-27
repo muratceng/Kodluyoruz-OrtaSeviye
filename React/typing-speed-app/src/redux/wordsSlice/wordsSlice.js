@@ -17,7 +17,6 @@ export const wordsSlice = createSlice({
                 .sort(() => Math.random() - 0.5)
                 .map((card) => ({ ...card}));
             state.data = tmp;
-            console.log("asdas",state.data);
         },
         changeEnglish:(state)=>{
             state.data=english;

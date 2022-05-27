@@ -11,7 +11,6 @@ function Text(){
 
   useEffect(() => {
     dispatch(shuffleWords());
-    console.log("text",data.data);
   }, [])
 
     let tenwords = data.data.slice(0,10);
@@ -26,8 +25,6 @@ function Text(){
     }
 
     useEffect(() => {
-        console.log(trueWords);
-        console.log(wrongWords);
     }, [trueWords,wrongWords])
     
 

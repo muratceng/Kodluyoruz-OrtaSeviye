@@ -4,6 +4,7 @@ import {faRefresh} from '@fortawesome/free-solid-svg-icons';
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { shuffleWords,setSpaceCount, setCurrentword, setTrueWords, setWorngWords } from "../../redux/wordsSlice/wordsSlice";
+import Result from "../Result";
 
 
 function Form(){
@@ -66,6 +67,10 @@ function Form(){
             onKeyDown={handleSpace}></input>
             <span className="timer me-2">{seconds}</span>
             <button className="btn btn-primary"><FontAwesomeIcon icon={faRefresh} ></FontAwesomeIcon></button>
+
+            {
+                seconds==0 && <Result/>
+            }
         </div>
     )
 }
