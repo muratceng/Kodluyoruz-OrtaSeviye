@@ -4,7 +4,7 @@ function Header(){
     
     return(
         <div>
-            <h1>Typing Speed App</h1>
+            <h1 className="header">Typing Speed App</h1>
         </div>
     )
 }

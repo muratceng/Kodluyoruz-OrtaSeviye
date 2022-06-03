@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faRefresh} from '@fortawesome/free-solid-svg-icons';
+import {faL, faRefresh} from '@fortawesome/free-solid-svg-icons';
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { shuffleWords,setSpaceCount, setCurrentword, setTrueWords, setWrongWords, restart } from "../../redux/wordsSlice/wordsSlice";
@@ -25,8 +25,13 @@ function Form(){
     setIsActive(false);
     }
 
+   
+
     useEffect(() => {
     let interval = null;
+    if(seconds===0){
+        setIsActive(false);
+    }
     if (isActive) {
         interval = setInterval(() => {
         setSeconds(seconds => seconds - 1);
