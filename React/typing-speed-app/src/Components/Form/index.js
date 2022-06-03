@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faRefresh} from '@fortawesome/free-solid-svg-icons';
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { shuffleWords,setSpaceCount, setCurrentword, setTrueWords, setWorngWords } from "../../redux/wordsSlice/wordsSlice";
+import { shuffleWords,setSpaceCount, setCurrentword, setTrueWords, setWrongWords, restart } from "../../redux/wordsSlice/wordsSlice";
 import Result from "../Result";
 
 
@@ -15,26 +15,36 @@ function Form(){
     const [wordCount,setWordCount]=useState(0);
     const [correct,setCorrect]=useState(0);
     const [wrong,setWrong]=useState(0);
+    const [isActive, setIsActive] = useState(false);
 
     const data = useSelector((state)=>state.words);
     const dispatch = useDispatch();
-  
-    if (count>1) {
-        if(seconds>0){
-            setTimeout(() => {
-                setSeconds(seconds-1)
-            }, 1000);
-        }
+        
+    function reset() {
+    setSeconds(60);
+    setIsActive(false);
     }
+
+    useEffect(() => {
+    let interval = null;
+    if (isActive) {
+        interval = setInterval(() => {
+        setSeconds(seconds => seconds - 1);
+        }, 1000);
+    } else if (!isActive && seconds === 0) {
+        clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+    }, [isActive, seconds]);
 
     const handleSpace= (e) => {
         if (e.keyCode === 32) {
           if(text.trim().toLowerCase() == data.data[wordCount].targetWord.toLowerCase()){
               setCorrect(correct+1);
-              dispatch(setTrueWords(text.trim()));
+              dispatch(setTrueWords(text.trim().toLowerCase()));
           }else{
               setWrong(wrong+1);
-              dispatch(setWorngWords(text.trim()));
+              dispatch(setWrongWords(text.trim().toLowerCase()));
           }
           setWordCount(wordCount+1);
           if(wordCount!=0 && wordCount%9==0){
@@ -49,24 +59,29 @@ function Form(){
     const handleChange =(e)=>{
         setText(e.target.value);
         dispatch(setCurrentword(e.target.value));
+        setCount(count+1)
+        if(count>0){
+            setIsActive(true);
+        }
     }
     
-    useEffect(() => {
-      console.log(correct);
-    }, [correct])
-    
-
-    useEffect(() => {
-        setCount(count+1)
-    }, [text])
-    
+    function newGame(){
+        dispatch(restart());
+        dispatch(shuffleWords());
+        setWordCount(0);
+        setCount(0);
+        reset();
+        setSeconds(60);
+        setText("");
+       
+    }
 
     return(
         <div>
             <input className="input me-2" type="text" value={text} disabled={(seconds==0)?true:false} onChange={(e)=>{handleChange(e)}}
             onKeyDown={handleSpace}></input>
             <span className="timer me-2">{seconds}</span>
-            <button className="btn btn-primary"><FontAwesomeIcon icon={faRefresh} ></FontAwesomeIcon></button>
+            <button className="btn btn-primary" onClick={()=>newGame()}><FontAwesomeIcon icon={faRefresh} ></FontAwesomeIcon></button>
 
             {
                 seconds==0 && <Result/>

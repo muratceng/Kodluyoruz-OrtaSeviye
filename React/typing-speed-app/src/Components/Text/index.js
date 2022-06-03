@@ -21,22 +21,18 @@ function Text(){
     let wrongWords = data.wrongWords;
 
     const isContain=()=>{
-        return data.data[targetWord].targetWord.toLowerCase().includes(currentWord.trim().toLowerCase());
+        return data.data[targetWord].targetWord.toLowerCase().startsWith(currentWord.trim().toLowerCase());
     }
 
-    useEffect(() => {
-    }, [trueWords,wrongWords])
-    
-
     return(
-        <div className="mid">
+        <div className="container mt-5">
         <div className="text">
             <div>
             {
                 tenwords.map((item,i)=>{
                     return <span key={i} className={currentWord.trim().length==0 && i==targetWord ? "gray":i==targetWord && isContain() ? "green":
-                                                    i==targetWord && !isContain() ? "red":i<targetWord && trueWords.indexOf(item.targetWord)!==-1 ?
-                                                "green":i<targetWord && trueWords.indexOf(item.targetWord)===-1 ? "red":""}>{item.targetWord} </span>
+                                                    i==targetWord && !isContain() ? "red":i<targetWord && trueWords.indexOf(item.targetWord.toLowerCase())!==-1 ?
+                                                "green":i<targetWord && trueWords.indexOf(item.targetWord.toLowerCase())===-1 ? "red":""}>{item.targetWord.toLowerCase()} </span>
                 })
             }
             </div>

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import turkish from "../../words/turkish.json";
-import english from "../../words/english.json";
+
 
 export const wordsSlice = createSlice({
     name:"words",
@@ -18,12 +18,6 @@ export const wordsSlice = createSlice({
                 .map((card) => ({ ...card}));
             state.data = tmp;
         },
-        changeEnglish:(state)=>{
-            state.data=english;
-        },
-        changeTurkish:(state)=>{
-            state.data=turkish;
-        },
         setSpaceCount : (state,action)=>{
             state.spaceCount=action.payload;
         },
@@ -34,12 +28,19 @@ export const wordsSlice = createSlice({
             let tmp = [...state.trueWords,action.payload];
             state.trueWords=tmp;
         },
-        setWorngWords:(state,action)=>{
+        setWrongWords:(state,action)=>{
             let tmp = [...state.wrongWords,action.payload];
             state.wrongWords=tmp;
+        },
+        restart:(state)=>{
+            state.data = turkish.words;
+            state.currentWord="";
+            state.spaceCount=0;
+            state.trueWords=[];
+            state.wrongWords=[];
         }
     },
 })
 
-export const {shuffleWords, setSpaceCount, setCurrentword, setTrueWords, setWorngWords} = wordsSlice.actions;
+export const {shuffleWords, setSpaceCount, setCurrentword, setTrueWords, setWrongWords, restart} = wordsSlice.actions;
 export default wordsSlice.reducer;

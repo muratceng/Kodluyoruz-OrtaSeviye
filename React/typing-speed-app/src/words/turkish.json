@@ -791,11 +791,6 @@
           "englishWord": "write"
         },
         {
-          "rank": 163,
-          "targetWord": "would",
-          "englishWord": "would"
-        },
-        {
           "rank": 164,
           "targetWord": "gibi",
           "englishWord": "like"
@@ -1377,7 +1372,7 @@
         },
         {
           "rank": 285,
-          "targetWord": "kâğıt",
+          "targetWord": "kağıt",
           "englishWord": "paper"
         },
         {
@@ -1699,11 +1694,6 @@
           "rank": 350,
           "targetWord": "sokak",
           "englishWord": "street"
-        },
-        {
-          "rank": 351,
-          "targetWord": "inch",
-          "englishWord": "inch"
         },
         {
           "rank": 352,
@@ -3464,11 +3454,6 @@
           "rank": 714,
           "targetWord": "üçüncü",
           "englishWord": "third"
-        },
-        {
-          "rank": 715,
-          "targetWord": "Shall",
-          "englishWord": "shall"
         },
         {
           "rank": 716,
