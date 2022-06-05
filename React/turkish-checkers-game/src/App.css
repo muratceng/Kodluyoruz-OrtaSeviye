@@ -21,5 +21,10 @@ body{
 }
 
 .tile{
+  display: grid;
+  place-content: center;
+}
 
+.tile img{
+  width: 70px;
 }
