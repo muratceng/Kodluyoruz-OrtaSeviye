@@ -8,7 +8,8 @@ for(let i=1;i<3;i++){
         pieces.push({
             image:'assets/white.png',
             x:i,
-            y:j
+            y:j,
+            type:'white piece'
         })
     }
 }
@@ -18,7 +19,8 @@ for(let i=5;i<7;i++){
         pieces.push({
             image:'assets/black.png',
             x:i,
-            y:j
+            y:j,
+            type:'black piece'
         })
     }
 }
@@ -37,7 +39,8 @@ const GameSlice = createSlice({
             }else{
                 state.turn='white'
             }
-        }
+        },
+        
     }
 })
 
