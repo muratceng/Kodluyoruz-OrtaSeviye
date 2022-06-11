@@ -15,10 +15,52 @@ function ChessBoard(){
     const [gridX,setGridX]=useState(0);
     const [gridY,setGridY]=useState(0);
     const [pieces,setPieces]=useState(data.pieces);
-    const [needEat,setNeedEat] = useState(undefined);
+    const [turn,setTurn]=useState('white');
+    const [whiteNeedTake,setWhiteNeedTake]=useState([]);
+    const [blackNeedTake,setBlackNeedTake]=useState([]);
     const dispatch = useDispatch();
 
-    function isNeedEat(yAxis,xAxis){
+    function changeTurn(){
+        if(turn==='white'){
+            setTurn('black');
+        }else{
+            setTurn('white');
+        }
+    }
+
+    function whiteTakePieceCheck(){
+        let tmp = pieces.filter((p)=>p.type === 'white piece');
+        let arr=[]
+        for(let item in tmp){
+            if(isTakePiece(tmp[item].y,tmp[item].x)){
+                arr.push(tmp[item]);
+            }
+        }
+        setWhiteNeedTake(arr);
+    }
+
+    function blackTakePieceCheck(){
+        let tmp = pieces.filter((p)=>p.type === 'black piece');
+        let arr=[]
+        for(let item in tmp){
+            if(isTakePiece(tmp[item].y,tmp[item].x)){
+                arr.push(tmp[item]);
+            }
+        }
+        setBlackNeedTake(arr);
+    }
+
+    useEffect(() => {
+        if(turn==='white'){
+             whiteTakePieceCheck();
+        }else{
+            blackTakePieceCheck();
+        }
+      
+    }, [turn])
+    
+
+    function isTakePiece(yAxis,xAxis){
         const index = pieces.findIndex((p)=>p.x===xAxis && p.y ===yAxis);
         const top = pieces.findIndex((p)=>p.x===xAxis+1 && p.y===yAxis);
         const left = pieces.findIndex((p)=>p.x===xAxis && p.y===yAxis-1);
@@ -28,17 +70,14 @@ function ChessBoard(){
         if(pieces[index] && pieces[index].type === 'white piece'){
             if(pieces[top] && pieces[top].type!==pieces[index].type){
                 if(isEmpty(xAxis+2,yAxis)){
-                    setNeedEat(xAxis+2,yAxis)
                     return true
                 }
             }if(pieces[left] && pieces[left].type!==pieces[index].type){
                 if(isEmpty(xAxis,yAxis-2)){
-                    setNeedEat(xAxis,yAxis-2)
                     return true
                 }
             }if(pieces[right] && pieces[right].type !== pieces[index].type){
                 if(isEmpty(xAxis,yAxis+2)){
-                    setNeedEat(xAxis,yAxis+2)
                     return true
                 }
             }
@@ -47,18 +86,14 @@ function ChessBoard(){
         }else{
             if(pieces[bottom] && pieces[bottom].type!==pieces[index].type){
                 if(isEmpty(xAxis-2,yAxis)){
-                    setNeedEat(xAxis-2,yAxis)
                     return true
                 }
             }if(pieces[left] && pieces[left].type!==pieces[index].type){
                 if(isEmpty(xAxis,yAxis-2)){
-                    setNeedEat(xAxis,yAxis-2)
                     return true
                 }
             }if(pieces[right] && pieces[right].type !== pieces[index].type){
                 if(isEmpty(xAxis,yAxis+2)){
-                    console.log("empty",isEmpty(xAxis,yAxis+2))
-                    setNeedEat(xAxis,yAxis+2)
                     return true
                 }
             }
@@ -78,14 +113,14 @@ function ChessBoard(){
 
     function isValidMove(newX,newY){
         const index = pieces.findIndex((p)=>p.x===gridX && p.y===gridY);
-        if(pieces[index].type==='white piece'){
-            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2   ){
+        if(turn==='white' && pieces[index].type==='white piece'){
+            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2 && newX>=gridX  ){
                 return true;
             }else{
                 return false;
             }      
-        }else if(pieces[index].type === "black piece" ){
-            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2  ){
+        }else if(turn==='black' &&pieces[index].type === "black piece" ){
+            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2 && newX<=gridX ){
                 return true;
             }else{
                 return false;
@@ -93,7 +128,7 @@ function ChessBoard(){
         }else if(pieces[index].type === "black king"){
             return true;
         }else{
-            return true;
+            return false;
         }
     }
 
@@ -110,7 +145,6 @@ function ChessBoard(){
             element.style.left=`${x}px`
             element.style.top=`${y}px`
             setActivePiece(element)
-            console.log("yem",isNeedEat(Math.floor((e.clientX-chessBoard.offsetLeft)/80),Math.abs(Math.ceil((e.clientY-chessBoard.offsetTop - 640)/80))));
         }
     }
 
@@ -155,13 +189,14 @@ function ChessBoard(){
                 const index = changedPieces.findIndex((p)=>p.x===gridX && p.y===gridY);
                 changedPieces[index]={...changedPieces[index],x:newX,y:newY};
                 setPieces(changedPieces);
+                changeTurn();
+
             }else{
                 activePiece.style.position="relative";
                 activePiece.style.removeProperty("top");
                 activePiece.style.removeProperty("left");
             }
             
-
             setActivePiece(null);
         }
     }
