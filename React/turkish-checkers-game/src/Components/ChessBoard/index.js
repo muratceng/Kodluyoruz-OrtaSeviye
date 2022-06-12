@@ -8,7 +8,7 @@ const horizantal =["a","b","c","d","e","f","g","h"];
 
 function ChessBoard(){
     let board =[]
-
+    
     const data = useSelector((state)=>state.game);
     const ChessBoardRef = useRef(null);
     const [activePiece,setActivePiece] = useState(null);
@@ -18,7 +18,12 @@ function ChessBoard(){
     const [turn,setTurn]=useState('white');
     const [whiteNeedTake,setWhiteNeedTake]=useState([]);
     const [blackNeedTake,setBlackNeedTake]=useState([]);
+    const [deletedPiece,setDeletedPiece]=useState(undefined);
     const dispatch = useDispatch();
+
+    function xor(xAxis,yAxis){
+        return ((Math.abs(xAxis-gridX)>0 && Math.abs(yAxis-gridY)===0) || (Math.abs(xAxis-gridX)===0 && Math.abs(yAxis-gridY)>0))
+    }
 
     function changeTurn(){
         if(turn==='white'){
@@ -29,9 +34,33 @@ function ChessBoard(){
     }
 
     function deletePiece(xAxis,yAxis){  
+        setDeletedPiece({x:xAxis,y:yAxis});
         let tmp = pieces.filter((p)=> p.x!==xAxis || p.y!==yAxis);
         setPieces(tmp);
     }
+
+    useEffect(() => {
+        if(deletedPiece !== undefined){
+            let tmp = pieces.filter((p)=> p.x!==deletedPiece.x || p.y!==deletedPiece.y);
+            setPieces(tmp);
+            setDeletedPiece(undefined);
+        }else{
+            if(turn==='white' && blackNeedTake.length>0){
+                changeTurn();
+            }else if(turn==='black' && whiteNeedTake.length>0){
+                changeTurn();   
+            }
+        }
+    }, [deletedPiece])
+
+    useEffect(()=>{
+       
+        whiteTakePieceCheck();
+        blackTakePieceCheck();
+        
+        
+    },[pieces])
+
 
     function whiteTakePieceCheck(){
         let tmp = pieces.filter((p)=>p.type === 'white piece');
@@ -57,12 +86,6 @@ function ChessBoard(){
 
     useEffect(() => {
         console.log("turn",turn);
-        if(turn==='white'){
-             whiteTakePieceCheck();
-        }else{
-            blackTakePieceCheck();
-        }
-      
     }, [turn])
     
 
@@ -108,6 +131,11 @@ function ChessBoard(){
         
     }
 
+    function findPiece(xAxis,yAxis){
+        let tmp = pieces.findIndex((p)=> p.x===xAxis && p.y ===yAxis);
+        return pieces[tmp] ? pieces[tmp] : undefined;
+    }
+
     function isEmpty(x,y){
         if( pieces.findIndex((p)=>p.x===x && p.y===y)===-1 && x<8 && y<8){
             return true
@@ -116,6 +144,7 @@ function ChessBoard(){
         }
 
     }
+
 
     function isValidMove(newX,newY){
         const index = pieces.findIndex((p)=>p.x===gridX && p.y===gridY);
@@ -128,8 +157,21 @@ function ChessBoard(){
         }
         //yenilmesi gereken siyah taş var ise durumu
         else if(turn==='white' && pieces[index].type==='white piece' && whiteNeedTake.length>0 && whiteNeedTake.includes(pieces[index])){
-            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 3 && newX>=gridX  ){
-                return true;
+            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && xor(newX,newY) && newX>=gridX ){
+                if(Math.abs(newX-gridX)==2 && findPiece(newX-1,newY) !== undefined){
+                    deletePiece(newX-1,newY);
+                    return true;
+                }else if(Math.abs(newY-gridY)==2 && findPiece(newX,newY-1) !== undefined){
+                    deletePiece(newX,newY+1);
+                    return true
+                }
+                else if(Math.abs(newY-gridY)==2 && findPiece(newX,newY+1) !== undefined){
+                    deletePiece(newX,newY-1);
+                    return true
+                }
+                else{
+                    return false;
+                }
             }else{
                 return false;
             }   
@@ -142,8 +184,21 @@ function ChessBoard(){
         }
         // yenilmesi gereken beyaz taş var ise durumu
         else if(turn==='black' &&pieces[index].type === "black piece" && blackNeedTake.length>0 && blackNeedTake.includes(pieces[index])){
-            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 3 && newX<=gridX ){
-                return true;
+            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && xor(newX,newY) && newX<=gridX ){
+                if(Math.abs(newX-gridX)==2 && findPiece(newX+1,newY) !== undefined){
+                    deletePiece(newX+1,newY);
+                    return true;
+                }else if(Math.abs(newY-gridY)==2 && findPiece(newX,newY-1) !== undefined){
+                    deletePiece(newX,newY+1);
+                    return true
+                }
+                else if(Math.abs(newY-gridY)==2 && findPiece(newX,newY+1) !== undefined){
+                    deletePiece(newX,newY-1);
+                    return true
+                }
+                else{
+                    return false;
+                }
             }else{
                 return false;
             }      
@@ -212,7 +267,6 @@ function ChessBoard(){
                 changedPieces[index]={...changedPieces[index],x:newX,y:newY};
                 setPieces(changedPieces);
                 changeTurn();
-
             }else{
                 activePiece.style.position="relative";
                 activePiece.style.removeProperty("top");
