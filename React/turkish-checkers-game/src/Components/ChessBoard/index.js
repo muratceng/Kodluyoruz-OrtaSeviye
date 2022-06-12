@@ -28,6 +28,11 @@ function ChessBoard(){
         }
     }
 
+    function deletePiece(xAxis,yAxis){  
+        let tmp = pieces.filter((p)=> p.x!==xAxis || p.y!==yAxis);
+        setPieces(tmp);
+    }
+
     function whiteTakePieceCheck(){
         let tmp = pieces.filter((p)=>p.type === 'white piece');
         let arr=[]
@@ -51,6 +56,7 @@ function ChessBoard(){
     }
 
     useEffect(() => {
+        console.log("turn",turn);
         if(turn==='white'){
              whiteTakePieceCheck();
         }else{
@@ -113,14 +119,30 @@ function ChessBoard(){
 
     function isValidMove(newX,newY){
         const index = pieces.findIndex((p)=>p.x===gridX && p.y===gridY);
-        if(turn==='white' && pieces[index].type==='white piece'){
+        if(turn==='white' && pieces[index].type==='white piece' && whiteNeedTake.length===0){
             if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2 && newX>=gridX  ){
                 return true;
             }else{
                 return false;
             }      
-        }else if(turn==='black' &&pieces[index].type === "black piece" ){
+        }
+        //yenilmesi gereken siyah taş var ise durumu
+        else if(turn==='white' && pieces[index].type==='white piece' && whiteNeedTake.length>0 && whiteNeedTake.includes(pieces[index])){
+            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 3 && newX>=gridX  ){
+                return true;
+            }else{
+                return false;
+            }   
+        }else if(turn==='black' &&pieces[index].type === "black piece" && blackNeedTake.length===0 ){
             if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2 && newX<=gridX ){
+                return true;
+            }else{
+                return false;
+            }      
+        }
+        // yenilmesi gereken beyaz taş var ise durumu
+        else if(turn==='black' &&pieces[index].type === "black piece" && blackNeedTake.length>0 && blackNeedTake.includes(pieces[index])){
+            if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 3 && newX<=gridX ){
                 return true;
             }else{
                 return false;
@@ -196,7 +218,6 @@ function ChessBoard(){
                 activePiece.style.removeProperty("top");
                 activePiece.style.removeProperty("left");
             }
-            
             setActivePiece(null);
         }
     }
@@ -218,8 +239,7 @@ function ChessBoard(){
     
     renderingPieces();
 
-   
-    
+
 
     return(
         <
