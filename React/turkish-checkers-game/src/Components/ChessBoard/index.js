@@ -19,6 +19,7 @@ function ChessBoard(){
     const [whiteNeedTake,setWhiteNeedTake]=useState([]);
     const [blackNeedTake,setBlackNeedTake]=useState([]);
     const [deletedPiece,setDeletedPiece]=useState(undefined);
+    const [moreCheck,setMorecheck] = useState(false);
     const dispatch = useDispatch();
 
     function xor(xAxis,yAxis){
@@ -45,21 +46,28 @@ function ChessBoard(){
             setPieces(tmp);
             setDeletedPiece(undefined);
         }else{
-            if(turn==='white' && blackNeedTake.length>0){
+            setMorecheck(true);
+        }
+    }, [deletedPiece])
+
+    useEffect(()=>{
+        whiteTakePieceCheck();
+        blackTakePieceCheck();
+    },[pieces])
+
+    useEffect(() => {
+        if(moreCheck===true){
+            blackTakePieceCheck();
+            whiteTakePieceCheck();
+            setMorecheck(false);
+             if(turn==='white' && blackNeedTake.length>0){
                 changeTurn();
             }else if(turn==='black' && whiteNeedTake.length>0){
                 changeTurn();   
             }
         }
-    }, [deletedPiece])
-
-    useEffect(()=>{
-       
-        whiteTakePieceCheck();
-        blackTakePieceCheck();
-        
-        
-    },[pieces])
+    }, [moreCheck])
+    
 
 
     function whiteTakePieceCheck(){
