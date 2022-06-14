@@ -20,12 +20,30 @@ function ChessBoard(){
     const [blackNeedTake,setBlackNeedTake]=useState([]);
     const [deletedPiece,setDeletedPiece]=useState(undefined);
     const [moreCheck,setMorecheck] = useState(false);
+    const [king,setKing] = useState(undefined);
     const dispatch = useDispatch();
 
     function xor(xAxis,yAxis){
         return ((Math.abs(xAxis-gridX)>0 && Math.abs(yAxis-gridY)===0) || (Math.abs(xAxis-gridX)===0 && Math.abs(yAxis-gridY)>0))
     }
 
+    useEffect(() => {
+      console.log(whiteNeedTake)
+    }, [whiteNeedTake])
+    
+
+    useEffect(() => {
+        if(king !== undefined){
+            let changedPieces =[...pieces];
+            const index = changedPieces.findIndex((p)=>p.x===king.x && p.y===king.y);
+            changedPieces[index]={...changedPieces[index],type:king.type,image:king.image};
+            setPieces(changedPieces);
+            console.log("xd",pieces);
+            setKing(undefined);
+        }
+    }, [king])
+     
+    
     function changeTurn(){
         if(turn==='white'){
             setTurn('black');
@@ -71,8 +89,12 @@ function ChessBoard(){
 
 
     function whiteTakePieceCheck(){
-        let tmp = pieces.filter((p)=>p.type === 'white piece');
+        let tmp = pieces.filter((p)=>p.color === 'white');
+        if(tmp.length===0){
+            endGame("black");
+        }
         let arr=[]
+        console.log(tmp);
         for(let item in tmp){
             if(isTakePiece(tmp[item].y,tmp[item].x)){
                 arr.push(tmp[item]);
@@ -82,7 +104,10 @@ function ChessBoard(){
     }
 
     function blackTakePieceCheck(){
-        let tmp = pieces.filter((p)=>p.type === 'black piece');
+        let tmp = pieces.filter((p)=>p.color === 'black');
+        if(tmp.length===0){
+            endGame("white");
+        }
         let arr=[]
         for(let item in tmp){
             if(isTakePiece(tmp[item].y,tmp[item].x)){
@@ -104,39 +129,44 @@ function ChessBoard(){
         const right = pieces.findIndex((p)=>p.x===xAxis && p.y===yAxis+1);
         const bottom = pieces.findIndex((p)=>p.x===xAxis-1 && p.y===yAxis);
 
-        if(pieces[index] && pieces[index].type === 'white piece'){
-            if(pieces[top] && pieces[top].type!==pieces[index].type){
+        if(pieces[index] && pieces[index].color === 'white' && pieces[index].type==='piece'){
+            if(pieces[top] && pieces[top].color!==pieces[index].color){
                 if(isEmpty(xAxis+2,yAxis)){
                     return true
                 }
-            }if(pieces[left] && pieces[left].type!==pieces[index].type){
+            }if(pieces[left] && pieces[left].color!==pieces[index].color){
                 if(isEmpty(xAxis,yAxis-2)){
                     return true
                 }
-            }if(pieces[right] && pieces[right].type !== pieces[index].type){
+            }if(pieces[right] && pieces[right].color !== pieces[index].color){
                 if(isEmpty(xAxis,yAxis+2)){
                     return true
                 }
             }
             return false;
             
-        }else{
-            if(pieces[bottom] && pieces[bottom].type!==pieces[index].type){
+        }else if(pieces[index] && pieces[index].color==='black' && pieces[index].type==='piece'){
+            if(pieces[bottom] && pieces[bottom].color!==pieces[index].color){
                 if(isEmpty(xAxis-2,yAxis)){
                     return true
                 }
-            }if(pieces[left] && pieces[left].type!==pieces[index].type){
+            }if(pieces[left] && pieces[left].color!==pieces[index].color){
                 if(isEmpty(xAxis,yAxis-2)){
                     return true
                 }
-            }if(pieces[right] && pieces[right].type !== pieces[index].type){
+            }if(pieces[right] && pieces[right].color !== pieces[index].color){
                 if(isEmpty(xAxis,yAxis+2)){
                     return true
                 }
             }
             return false;
+        }else if(pieces[index] && pieces[index].color==='white' && pieces[index].type==='king'){
+
+        }else if(pieces[index] && pieces[index].color==='black' && pieces[index].type==='king'){
+
+        }else{
+            return false;
         }
-        
     }
 
     function findPiece(xAxis,yAxis){
@@ -156,7 +186,7 @@ function ChessBoard(){
 
     function isValidMove(newX,newY){
         const index = pieces.findIndex((p)=>p.x===gridX && p.y===gridY);
-        if(turn==='white' && pieces[index].type==='white piece' && whiteNeedTake.length===0){
+        if(turn==='white' && pieces[index].color==='white' && pieces[index].type==='piece' && whiteNeedTake.length===0){
             if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2 && newX>=gridX  ){
                 return true;
             }else{
@@ -164,17 +194,17 @@ function ChessBoard(){
             }      
         }
         //yenilmesi gereken siyah taş var ise durumu
-        else if(turn==='white' && pieces[index].type==='white piece' && whiteNeedTake.length>0 && whiteNeedTake.includes(pieces[index])){
+        else if(turn==='white' && pieces[index].type==='piece' && pieces[index].color==='white' && whiteNeedTake.length>0 && whiteNeedTake.includes(pieces[index])){
             if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && xor(newX,newY) && newX>=gridX ){
                 if(Math.abs(newX-gridX)===2 && findPiece(newX-1,newY) !== undefined){
                     deletePiece(newX-1,newY);
                     return true;
                 }else if(Math.abs(newY-gridY)===2 && findPiece(newX,newY-1) !== undefined){
-                    deletePiece(newX,newY+1);
+                    deletePiece(gridX,gridY+1);
                     return true
                 }
                 else if(Math.abs(newY-gridY)===2 && findPiece(newX,newY+1) !== undefined){
-                    deletePiece(newX,newY-1);
+                    deletePiece(gridX,gridY-1);
                     return true
                 }
                 else{
@@ -183,7 +213,7 @@ function ChessBoard(){
             }else{
                 return false;
             }   
-        }else if(turn==='black' &&pieces[index].type === "black piece" && blackNeedTake.length===0 ){
+        }else if(turn==='black' &&pieces[index].color === "black" && pieces[index].type==='piece' && blackNeedTake.length===0 ){
             if( isEmpty(newX,newY) && Math.abs((newX-gridX))<2 && Math.abs((newY-gridY))<2 && (Math.abs(newX-gridX))+(Math.abs(newY-gridY)) < 2 && newX<=gridX ){
                 return true;
             }else{
@@ -191,17 +221,17 @@ function ChessBoard(){
             }      
         }
         // yenilmesi gereken beyaz taş var ise durumu
-        else if(turn==='black' &&pieces[index].type === "black piece" && blackNeedTake.length>0 && blackNeedTake.includes(pieces[index])){
+        else if(turn==='black' &&pieces[index].color === "black" && pieces[index].type==='piece' && blackNeedTake.length>0 && blackNeedTake.includes(pieces[index])){
             if( isEmpty(newX,newY) && Math.abs((newX-gridX))<3 && Math.abs((newY-gridY))<3 && xor(newX,newY) && newX<=gridX ){
                 if(Math.abs(newX-gridX)===2 && findPiece(newX+1,newY) !== undefined){
                     deletePiece(newX+1,newY);
                     return true;
                 }else if(Math.abs(newY-gridY)===2 && findPiece(newX,newY-1) !== undefined){
-                    deletePiece(newX,newY+1);
+                    deletePiece(gridX,gridY+1);
                     return true
                 }
                 else if(Math.abs(newY-gridY)===2 && findPiece(newX,newY+1) !== undefined){
-                    deletePiece(newX,newY-1);
+                    deletePiece(gridX,gridY-1);
                     return true
                 }
                 else{
@@ -209,9 +239,13 @@ function ChessBoard(){
                 }
             }else{
                 return false;
-            }      
-        }else if(pieces[index].type === "black king"){
+            }
+            //beyaz damaysa      
+        }else if(turn==='white' && pieces[index].type === "king" && pieces[index].color==='white'){
             return true;
+            //siyah damaysa
+        }else if(turn==='black' && pieces[index].type === 'king' && pieces[index].color==='black'){
+            return true
         }else{
             return false;
         }
@@ -274,6 +308,12 @@ function ChessBoard(){
                 const index = changedPieces.findIndex((p)=>p.x===gridX && p.y===gridY);
                 changedPieces[index]={...changedPieces[index],x:newX,y:newY};
                 setPieces(changedPieces);
+                if(turn === 'white' && newX===7){
+                    setKing(changedPieces[index]={...changedPieces[index],image:'assets/king.png', type:'king'});
+                }
+                if(turn === 'black' && newX===0){
+                    setKing(changedPieces[index]={...changedPieces[index],image:'assets/blackKing.png', type:'king'});
+                }
                 changeTurn();
             }else{
                 activePiece.style.position="relative";
@@ -301,6 +341,9 @@ function ChessBoard(){
     
     renderingPieces();
 
+    function endGame(winner){
+        console.log(`${winner} kazandı`);
+    }
 
 
     return(

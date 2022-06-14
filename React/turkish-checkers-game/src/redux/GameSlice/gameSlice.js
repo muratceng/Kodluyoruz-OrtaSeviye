@@ -9,7 +9,8 @@ for(let i=1;i<3;i++){
             image:'assets/white.png',
             x:i,
             y:j,
-            type:'white piece'
+            color:'white',
+            type:'piece'
         })
     }
 }
@@ -20,7 +21,8 @@ for(let i=5;i<7;i++){
             image:'assets/black.png',
             x:i,
             y:j,
-            type:'black piece'
+            color:'black',
+            type:'piece'
         })
     }
 }
