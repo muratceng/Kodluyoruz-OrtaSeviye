@@ -1,12 +1,13 @@
 body{
   height: 100vh;
   width: 100vw;
-  background-color: #1d2f0f;
+  background-color: #68b7e8 !important;
 }
 
 .App{
   display: grid;
   place-content: center;
+  text-align: center;
 }
 
 .board{

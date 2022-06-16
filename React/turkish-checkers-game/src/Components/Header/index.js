@@ -1,6 +1,6 @@
 function Header(){
     return(
-        <div>Header</div>
+        <h1>Turkish Cheekers game</h1>
     )
 }
 

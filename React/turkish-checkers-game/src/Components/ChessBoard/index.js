@@ -21,6 +21,7 @@ function ChessBoard(){
     const [deletedPiece,setDeletedPiece]=useState(undefined);
     const [moreCheck,setMorecheck] = useState(false);
     const [king,setKing] = useState(undefined);
+    const [winner,setWinner]=useState(undefined);
     const dispatch = useDispatch();
 
     function xor(xAxis,yAxis){
@@ -28,7 +29,7 @@ function ChessBoard(){
     }
 
     useEffect(() => {
-      console.log(whiteNeedTake)
+        console.log(whiteNeedTake);
     }, [whiteNeedTake])
     
 
@@ -38,7 +39,6 @@ function ChessBoard(){
             const index = changedPieces.findIndex((p)=>p.x===king.x && p.y===king.y);
             changedPieces[index]={...changedPieces[index],type:king.type,image:king.image};
             setPieces(changedPieces);
-            console.log("xd",pieces);
             setKing(undefined);
         }
     }, [king])
@@ -56,6 +56,33 @@ function ChessBoard(){
         setDeletedPiece({x:xAxis,y:yAxis});
         let tmp = pieces.filter((p)=> p.x!==xAxis || p.y!==yAxis);
         setPieces(tmp);
+    }
+
+    function kingDeletePiece(piece,xAxis,yAxis){
+        let x = xAxis-piece.x;
+        let y = yAxis-piece.y;
+        let items =[];
+        console.log(x,y)
+
+        if(x!==0){
+            items = pieces.filter((p)=>
+                p.y===piece.y && piece.color !== p.color
+            )
+            items.map((p)=>{
+                deletePiece(p.x,p.y);
+            })
+        }
+        if(y!==0){
+            items = pieces.filter((p)=>
+                p.x===piece.x && piece.color !== p.color
+            )
+            items.map((p)=>{
+                deletePiece(p.x,p.y);
+            })
+        }
+
+        console.log(items);
+
     }
 
     useEffect(() => {
@@ -91,10 +118,9 @@ function ChessBoard(){
     function whiteTakePieceCheck(){
         let tmp = pieces.filter((p)=>p.color === 'white');
         if(tmp.length===0){
-            endGame("black");
+            setWinner("black");
         }
         let arr=[]
-        console.log(tmp);
         for(let item in tmp){
             if(isTakePiece(tmp[item].y,tmp[item].x)){
                 arr.push(tmp[item]);
@@ -106,7 +132,7 @@ function ChessBoard(){
     function blackTakePieceCheck(){
         let tmp = pieces.filter((p)=>p.color === 'black');
         if(tmp.length===0){
-            endGame("white");
+            setWinner("white");
         }
         let arr=[]
         for(let item in tmp){
@@ -123,11 +149,11 @@ function ChessBoard(){
     
 
     function isTakePiece(yAxis,xAxis){
-        const index = pieces.findIndex((p)=>p.x===xAxis && p.y ===yAxis);
-        const top = pieces.findIndex((p)=>p.x===xAxis+1 && p.y===yAxis);
-        const left = pieces.findIndex((p)=>p.x===xAxis && p.y===yAxis-1);
-        const right = pieces.findIndex((p)=>p.x===xAxis && p.y===yAxis+1);
-        const bottom = pieces.findIndex((p)=>p.x===xAxis-1 && p.y===yAxis);
+        let index = pieces.findIndex((p)=>p.x===xAxis && p.y ===yAxis);
+        let top = pieces.findIndex((p)=>p.x===xAxis+1 && p.y===yAxis);
+        let left = pieces.findIndex((p)=>p.x===xAxis && p.y===yAxis-1);
+        let right = pieces.findIndex((p)=>p.x===xAxis && p.y===yAxis+1);
+        let bottom = pieces.findIndex((p)=>p.x===xAxis-1 && p.y===yAxis);
 
         if(pieces[index] && pieces[index].color === 'white' && pieces[index].type==='piece'){
             if(pieces[top] && pieces[top].color!==pieces[index].color){
@@ -161,9 +187,67 @@ function ChessBoard(){
             }
             return false;
         }else if(pieces[index] && pieces[index].color==='white' && pieces[index].type==='king'){
+            top = pieces.filter((p)=>p.y===yAxis && p.color!=='white')
+            left = pieces.filter((p)=>p.x===xAxis && p.color!=="white");
+            let res = false;
 
+            if(top){
+                top.map((p)=>{
+                    if(p.x-pieces[index].x>0){
+                        if(isEmpty(p.x+1,p.y) && (isEmpty(p.x-1,p.y) || p.x-1===pieces[index].x)){
+                            res = true;
+                        }
+                    }else{
+                        if(isEmpty(p.x-1,p.y) && (isEmpty(p.x+1,p.y) || p.x+1===pieces[index].x)){
+                            res = true;
+                        }
+                    }
+                })
+            }if(left){
+                left.map((p)=>{
+                    if(p.y-pieces[index].y>0){
+                        if(isEmpty(p.x,p.y+1) && (isEmpty(p.x,p.y-1) || p.y-1===pieces[index].y)){
+                            res = true;
+                        }
+                    }else{
+                        if(isEmpty(p.x,p.y-1) && (isEmpty(p.x,p.y+1) || p.y+1===pieces[index].y)){
+                            res = true;
+                        }
+                    }
+                })
+            }
+            return res;
         }else if(pieces[index] && pieces[index].color==='black' && pieces[index].type==='king'){
+            top = pieces.filter((p)=>p.y===yAxis && p.color!=='black')
+            left = pieces.filter((p)=>p.x===xAxis && p.color!=="black");
+            let res = false;
 
+            if(top){
+                top.map((p)=>{
+                    if(p.x-pieces[index].x>0){
+                        if(isEmpty(p.x+1,p.y) && (isEmpty(p.x-1,p.y) || p.x-1===pieces[index].x)){
+                            res = true;
+                        }
+                    }else{
+                        if(isEmpty(p.x-1,p.y) && (isEmpty(p.x+1,p.y) || p.x+1===pieces[index].x)){
+                            res = true;
+                        }
+                    }
+                })
+            }if(left){
+                left.map((p)=>{
+                    if(p.y-pieces[index].y>0){
+                        if(isEmpty(p.x,p.y+1) && (isEmpty(p.x,p.y-1) || p.y-1===pieces[index].y)){
+                            res = true;
+                        }
+                    }else{
+                        if(isEmpty(p.x,p.y-1) && (isEmpty(p.x,p.y+1) || p.y+1===pieces[index].y)){
+                            res = true;
+                        }
+                    }
+                })
+            }
+            return res;
         }else{
             return false;
         }
@@ -175,12 +259,65 @@ function ChessBoard(){
     }
 
     function isEmpty(x,y){
-        if( pieces.findIndex((p)=>p.x===x && p.y===y)===-1 && x<8 && y<8){
+        if( pieces.findIndex((p)=>p.x===x && p.y===y)===-1 && x<8 && y<8 && x>=0 && y>=0){
             return true
         }else{
             return false;
         }
 
+    }
+
+    function maxKingxAxis(piece){
+        const xItems= pieces.filter((p)=> p.y===piece.y && p.x >piece.x);
+        let max = 8;
+        xItems.map((p)=>{
+            if(piece.color === p.color && p.x<max){
+                max=p.x
+            }else if(piece.color !== p.color && p.x<max && isEmpty(p.x+1,p.y) === false){
+                max=p.x
+            }
+        })
+        return max
+    }
+
+    function minKingxAxis(piece){
+        const xItems= pieces.filter((p)=> p.y===piece.y && p.x <piece.x);
+        let min = -1;
+        xItems.map((p)=>{
+
+            if(piece.color === p.color && p.x>min){
+                min=p.x
+            }else if(piece.color !== p.color && p.x>min && isEmpty(p.x-1,p.y) === false){
+                min=p.x
+            }
+        })
+        return min
+    }
+
+    function maxKingyAxis(piece){
+        const xItems= pieces.filter((p)=> p.y>piece.y && p.x === piece.x);
+        let max = 8;
+        xItems.map((p)=>{
+            if(piece.color === p.color && p.y<max){
+                max=p.y
+            }else if(piece.color !== p.color && p.y<max && isEmpty(p.x,p.y+1) === false){
+                max=p.y
+            }
+        })
+        return max
+    }
+
+    function minKingyAxis(piece){
+        const xItems= pieces.filter((p)=> p.y<piece.y && p.x ===piece.x);
+        let min = -1;
+        xItems.map((p)=>{
+            if(piece.color === p.color && p.y>min){
+                min=p.y
+            }else if(piece.color !== p.color && p.y>min && isEmpty(p.x,p.y-1) === false){
+                min=p.y
+            }
+        })
+        return min
     }
 
 
@@ -241,12 +378,26 @@ function ChessBoard(){
                 return false;
             }
             //beyaz damaysa      
-        }else if(turn==='white' && pieces[index].type === "king" && pieces[index].color==='white'){
+        }else if(turn==='white' && pieces[index].type === "king" &&isEmpty(newX,newY) && pieces[index].color==='white' && whiteNeedTake.length===0){
+            if(isEmpty(newX,newY) && xor(newX,newY) && newX<maxKingxAxis(pieces[index]) && newX>minKingxAxis(pieces[index]) && newY>minKingyAxis(pieces[index]) && newY<maxKingyAxis(pieces[index])){
+                return true;
+            }
+        }//beyaz damanın taş yemesi zorunluysa
+        else if(turn==='white' && pieces[index].type === "king" && isEmpty(newX,newY) && whiteNeedTake.length>0 && pieces[index].color==='white' && whiteNeedTake.length>0 && whiteNeedTake.includes(pieces[index]) && newX<maxKingxAxis(pieces[index]) && newX>minKingxAxis(pieces[index]) && newY>minKingyAxis(pieces[index]) && newY<maxKingyAxis(pieces[index])){
+            kingDeletePiece(pieces[index],newX,newY);
             return true;
-            //siyah damaysa
-        }else if(turn==='black' && pieces[index].type === 'king' && pieces[index].color==='black'){
-            return true
-        }else{
+        }
+        //siyah damaysa
+        else if(turn==='black' && pieces[index].type === 'king' && isEmpty(newX,newY) && blackNeedTake.length===0 &&pieces[index].color==='black' && newX<maxKingxAxis(pieces[index]) && newX>minKingxAxis(pieces[index]) && newY>minKingyAxis(pieces[index]) && newY<maxKingyAxis(pieces[index])){
+            if(isEmpty(newX,newY) && xor(newX,newY)){
+                return true;
+            }
+        }// siyah damanın taş yemesi zorunluysa
+        else if(turn==='black' && pieces[index].type === 'king' && isEmpty(newX,newY) &&blackNeedTake.length>0 && pieces[index].color==='black' && blackNeedTake.length>0 && blackNeedTake.includes(pieces[index]) && newX<maxKingxAxis(pieces[index]) && newX>minKingxAxis(pieces[index]) && newY>minKingyAxis(pieces[index]) && newY<maxKingyAxis(pieces[index])){
+            kingDeletePiece(pieces[index],newX,newY);
+            return true;
+        }
+        else{
             return false;
         }
     }
@@ -338,15 +489,28 @@ function ChessBoard(){
             }
         }
     }
+
+    function restart(){
+    setActivePiece(null);
+    setGridX(0);
+    setGridY(0);
+    setPieces(data.pieces);
+    setTurn('white');
+    setWhiteNeedTake([]);
+    setBlackNeedTake([]);
+    setDeletedPiece(undefined);
+    setMorecheck(false);
+    setKing(undefined);
+    setWinner(undefined);
+    }
     
     renderingPieces();
 
-    function endGame(winner){
-        console.log(`${winner} kazandı`);
-    }
+   
 
 
     return(
+        <div>
         <
         div className="board" 
         onMouseDown={(e)=>grabPiece(e)}
@@ -356,6 +520,15 @@ function ChessBoard(){
         >
             {board}
         </div>
+        { winner &&
+            <div className="alert alert-success" onClick={()=>restart()} role="alert">
+            {winner} is won click for play again
+            </div>
+        }
+        <div>
+            <button className="btn btn-primary" onClick={()=>restart()}>Restart</button>
+        </div>
+    </div>
     )
 }
 
